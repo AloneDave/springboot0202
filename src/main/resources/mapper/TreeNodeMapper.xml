@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hnkj.springboot0202.mapper.TreeNodeMapper" >
+  <resultMap id="BaseResultMap" type="net.hnkj.springboot0202.model.TreeNode" >
+    <constructor >
+      <idArg column="tree_node_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="tree_node_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="tree_node_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="parent_node_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="position" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="icon" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tree_node_id, tree_node_name, tree_node_type, parent_node_id, url, position, icon
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_tree_node
+    where tree_node_id = #{treeNodeId,jdbcType=INTEGER}
+  </select>
+  <select id="listTreeNode" resultMap="BaseResultMap" parameterType="net.hnkj.springboot0202.model.TreeNode">
+    select
+    <include refid="Base_Column_List" />
+    from t_tree_node
+    where parent_node_id is null
+    Order by position desc
+  </select>
+  <select id="listChildrenTreeNode" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from t_tree_node
+    where parent_node_id = #{parentNodeId}
+    Order by position desc
+
+  </select>
+  <delete id="deleteByPrimaryKey"  parameterType="java.lang.Integer" >
+    delete from t_tree_node
+    where tree_node_id = #{treeNodeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.hnkj.springboot0202.model.TreeNode" >
+    insert into t_tree_node (tree_node_id, tree_node_name, tree_node_type, 
+      parent_node_id, url, position, 
+      icon)
+    values (#{treeNodeId,jdbcType=INTEGER}, #{treeNodeName,jdbcType=VARCHAR}, #{treeNodeType,jdbcType=INTEGER}, 
+      #{parentNodeId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{position,jdbcType=INTEGER}, 
+      #{icon,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.hnkj.springboot0202.model.TreeNode" >
+    insert into t_tree_node
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="treeNodeId != null" >
+        tree_node_id,
+      </if>
+      <if test="treeNodeName != null" >
+        tree_node_name,
+      </if>
+      <if test="treeNodeType != null" >
+        tree_node_type,
+      </if>
+      <if test="parentNodeId != null" >
+        parent_node_id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="icon != null" >
+        icon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="treeNodeId != null" >
+        #{treeNodeId,jdbcType=INTEGER},
+      </if>
+      <if test="treeNodeName != null" >
+        #{treeNodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="treeNodeType != null" >
+        #{treeNodeType,jdbcType=INTEGER},
+      </if>
+      <if test="parentNodeId != null" >
+        #{parentNodeId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hnkj.springboot0202.model.TreeNode" >
+    update t_tree_node
+    <set >
+      <if test="treeNodeName != null" >
+        tree_node_name = #{treeNodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="treeNodeType != null" >
+        tree_node_type = #{treeNodeType,jdbcType=INTEGER},
+      </if>
+      <if test="parentNodeId != null" >
+        parent_node_id = #{parentNodeId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tree_node_id = #{treeNodeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hnkj.springboot0202.model.TreeNode" >
+    update t_tree_node
+    set tree_node_name = #{treeNodeName,jdbcType=VARCHAR},
+      tree_node_type = #{treeNodeType,jdbcType=INTEGER},
+      parent_node_id = #{parentNodeId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      position = #{position,jdbcType=INTEGER},
+      icon = #{icon,jdbcType=VARCHAR}
+    where tree_node_id = #{treeNodeId,jdbcType=INTEGER}
+  </update>
+</mapper>
